@@ -1,13 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import styles from "./header.scss";
 
 const Header = () => {
   return (
-    <nav className="navbar navbar-inverse bg-inverse">
-      <div className="container">
-        <Link className="navbar-brand" to="/">Home</Link>
-      </div>
-    </nav>
+    <div className={styles.header}>
+      <h1 className={styles.headerMain}>
+        Marvel 
+      </h1>
+      <h3 className={styles.headerDev}>FrontEnd Challenge</h3>
+    </div>
   );
 };
 

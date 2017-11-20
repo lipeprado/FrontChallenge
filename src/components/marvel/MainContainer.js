@@ -2,82 +2,70 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as myActions from '../../actions/myActions';
+import LazyLoad from 'react-lazyload';
+import { CSSTransitionGroup } from 'react-transition-group';
+import * as loadActions from '../../actions/loadActions';
 import styles from './main.scss';
 
 class MainContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
-      users: "",
-    };
-
-    this.sendUser = this.sendUser.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
-    this.removeItem = this.removeItem.bind(this);
-    
-    
+      loading: true,
+    }; 
+    this.loadComics = this.loadComics.bind(this);     
   }
-  onInputChange(e){
-    let val = e.target.value;    
-    this.setState({
-      users: val,
+  
+  componentDidMount(){   
+    this.loadComics();
+  }
+
+  loadComics(){
+    this.props.actions.loadComics(this.state.loading);
+  }
+
+  
+  render() {
+    let { comics, loading } = this.props;    
+    let quadrinhos = comics.map(comic => {
+      return (
+        <div key={comic.id} className={styles.card}>         
+          <LazyLoad height={450} offset={300} once>
+            <img src={comic.thumbnail.path + "/portrait_uncanny." + comic.thumbnail.extension} className={styles.card__image}/> 
+          </LazyLoad>
+          <a href={comic.events.collectionURI} target="_blank" className={styles.card__link}>Ver Agora</a>          
+          <h3 className={styles.card__title}>{comic.title}</h3>
+        </div>
+      );
     });
     
-  }
-
-  sendUser(e){
-    e.preventDefault();
-    let users = this.state.users;
-    this.props.actions.sendUsers(users);
-  }
-
-  removeItem(user){
-    this.props.actions.removeUser(user);
-  }
-
-  partial(fn, ...args) {
-    return fn.bind(fn, ...args);
-  }
-
-  render() {
-    console.log('this.props', this.props.users);
-    
     return (
-      <div>
-        <form onSubmit={this.sendUser}>
-          <input name="users" type="text" onChange={this.onInputChange}/>
-          <input type="submit" value="Enviar" />
-        </form>
-        {this.props.users.map((u, i) => {
-          return (
-            <p key={i}>{u}
-              <strong onClick={this.partial(this.removeItem, u)}> X</strong> 
-            </p>
-          );
-        })}
-
+      <div className={styles.mainContainer}>
+        {!loading ? <p>Carregando...</p> : quadrinhos}
       </div>
     );
   }
 }
 
 MainContainer.propTypes = {
-  users: PropTypes.array.isRequired,
+  comics: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
   actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log('MAP', state);
+  console.log('MSTP', state);
   
   return {
-    users: state.users || []
+    comics: state.comics.dataComics || [],
+    loading: state.comics.loading,
   };
 }
 
 function mapDispatchToProps(dispatch) {
+  
   return {
-    actions: bindActionCreators(myActions, dispatch)
+    actions: bindActionCreators(loadActions, dispatch)
   };
 }
 

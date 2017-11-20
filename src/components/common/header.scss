@@ -1,0 +1,36 @@
+.header{
+ display: flex;
+ justify-content: center;
+ background: rgb(50, 68, 102);
+ font-family: 'Marmelad', sans-serif;  
+ position: relative;
+}
+
+.headerMain{
+  font-size: 4rem;
+  font-family: 'Paytone One', sans-serif;  
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  margin: 0;
+  max-width: 50%;
+  min-width: 25%;
+  padding: 1rem 0;
+}
+
+.headerDev{
+  font-size: .9rem;
+  text-align: center;
+  color: #40db67;
+  position: absolute;
+  top: 23%;
+  left: calc(50% - 3rem);
+}
+
+@media screen and (max-width: 400px) {
+  .headerDev{
+    left: calc(50% - 1.7rem);
+  }
+  
+}

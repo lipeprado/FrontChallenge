@@ -1,6 +1,6 @@
 export default {
-  users: [
-    "Filipe", 
-    "Vanessa"
-  ],
+  comics: {
+    dataComics: [],
+    loading: false,
+  },
 };

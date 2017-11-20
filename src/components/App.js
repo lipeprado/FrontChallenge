@@ -6,7 +6,7 @@ const App = ({ children }) => {
   return (
     <div>
       <Header />
-      <div className="container">
+      <div>
         {children}
       </div>
     </div>
